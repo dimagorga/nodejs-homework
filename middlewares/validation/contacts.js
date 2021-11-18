@@ -7,7 +7,7 @@ const contactsValidation = (req, res, next) => {
     email: Joi.string()
       .email({
         minDomainSegments: 2,
-        tlds: { allow: ["com", "org", "net", "uk", "ua", "ru"] },
+        tlds: { allow: ["com", "org", "uk", "net", "ua", "ru"] },
       })
       .required(),
     phone: Joi.number().required(),
