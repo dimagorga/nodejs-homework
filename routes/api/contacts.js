@@ -8,7 +8,8 @@ const contactAdd = require("../../controllers/contacts/contactAdd");
 const updateStatusContact = require("../../controllers/contacts/updateStatusContact");
 
 const { contactsValidation } = require("../../middlewares/validation/contacts");
-
+const { authValidation } = require("../../middlewares/auth/authValidation");
+router.use(authValidation);
 router.get("/", getContacts);
 
 router.get("/:contactId", getOneContact);

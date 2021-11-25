@@ -1,3 +1,4 @@
-const Product = require("./contact");
+const Contact = require("./contact");
+const User = require("./user");
 
-module.exports = { Product };
+module.exports = { Contact, User };
