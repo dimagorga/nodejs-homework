@@ -1,4 +1,8 @@
 const { User } = require("../../model");
+const gravatar = require("gravatar");
+const fs = require("fs/promises");
+const path = require("path");
+const avatarDir = path.join(__dirname, "../../public/avatars");
 
 const register = async (req, res, next) => {
   try {
@@ -10,11 +14,15 @@ const register = async (req, res, next) => {
         .status(409)
         .json({ message: `User with email: ${email} already exist` });
     }
-    const newUser = new User({ email });
 
+    const avatarURL = gravatar.url(`${email}`);
+
+    const newUser = new User({ email, avatarURL });
     newUser.setPassword(password);
 
     await newUser.save();
+    const avatarFolder = path.join(avatarDir, String(newUser._id));
+    await fs.mkdir(avatarFolder);
     res.status(201).json({
       newUser,
       status: "success",
