@@ -11,7 +11,10 @@ const contactsValidation = (req, res, next) => {
       })
       .required(),
     phone: Joi.number().required(),
-    favorite: Joi.boolean(),
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
   });
   const result = schema.validate(req.body);
   if (result.error) {
