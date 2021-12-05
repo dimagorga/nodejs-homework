@@ -3,7 +3,8 @@ const gravatar = require("gravatar");
 const fs = require("fs/promises");
 const path = require("path");
 const avatarDir = path.join(__dirname, "../../public/avatars");
-const sendMail = require("../../helpers/sendGrid/sendMail.js");
+const sendMail = require("../../helpers/nodemailer/sendMail.js");
+const { nanoid } = require("nanoid");
 
 const register = async (req, res, next) => {
   try {
@@ -17,7 +18,7 @@ const register = async (req, res, next) => {
     }
 
     const avatarURL = gravatar.url(`${email}`);
-
+    const verificationToken = nanoid();
     const newUser = new User({ email, avatarURL, verificationToken });
     newUser.setPassword(password);
 
@@ -26,7 +27,7 @@ const register = async (req, res, next) => {
     const mail = {
       to: email,
       subject: "Подтверждение регистрации",
-      html: `<a href="http://localhost:8086/api/auth/users/verify/${verificationToken}">Перейдите по ссылке для подтверждения</a>`,
+      html: `<a href="http://localhost:3000/api/auth/users/verify/${verificationToken}">Перейдите по ссылке для подтверждения</a>`,
     };
 
     await sendMail(mail);

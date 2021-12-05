@@ -1,5 +1,5 @@
 const { User } = require("../../model");
-const sendMail = require("../../helpers/sendGrid/sendMail.js");
+const sendMail = require("../../helpers/nodemailer/sendMail.js");
 
 const verifyResending = async (req, res, next) => {
   try {
@@ -10,13 +10,13 @@ const verifyResending = async (req, res, next) => {
     } else if (user.verify) {
       res.status(400).json({ message: "Verification has already been passed" });
     } else if (!user.verify) {
-      const mail = {
+      const emailOptions = {
         to: email,
         subject: "Подтверждение регистрации",
-        html: `<a href="http://localhost:8086/api/auth/users/verify/${user.verificationToken}">Перейдите по ссылке для подтверждения</a>`,
+        html: `<a href="http://localhost:3000/api/auth/users/verify/${user.verificationToken}">Перейдите по ссылке для подтверждения</a>`,
       };
 
-      await sendMail(mail);
+      await sendMail(emailOptions);
       res.status(200).json({ message: "Verification email sent" });
     }
   } catch (error) {
